@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @keyframes radial-gradient-animation {
+      0% {
+        background: radial-gradient(circle at center, #ff0000, #0000ff);
+      }
+      50% {
+        background: radial-gradient(circle at center, #00ff00, #ff00ff);
+      }
+      100% {
+        background: radial-gradient(circle at center, #ff0000, #0000ff);
+      }
+    }
+   .animated-ellipse {
+      width: 200px;
+      height: 100px;
+      border-radius: 50%;
+      animation: radial-gradient-animation 5s infinite;
+    }
+
+ 
+   .resume-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-gap: 20px;
+    }
+
+    /* 基本信息样式 */
+   .basic-info {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    /* 工作经历样式 */
+   .work-experience {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    /* 教育经历样式 */
+   .education-experience {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    /* 社会关系样式 */
+   .social-relationships {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    /* 自我评价样式 */
+   .self-evaluation {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+  </style>
+  <title>Resume with CSS Grid</title>
+</head>
+
+<body>
+  <div class="animated-ellipse"></div>
+  <div class="resume-container">
+  
+  </div>
+    <div class="basic-info">
+      <h2>基本信息</h2>
+      <table>
+        <tr>
+          <th>姓名</th>
+          <td>王沛琦</td>
+        </tr>
+        <tr>
+          <th>年龄</th>
+          <td>18</td>
+        </tr>
+        <tr>
+          <th>性别</th>
+          <td>男</td>
+        </tr>
+        <tr>
+          <th>地址</th>
+          <td>浙江 宁波</td>
+    
