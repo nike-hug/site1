@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quadratic Equation Solver</title>
+    <style>
+        .equation {
+            font-size: 1.2em;
+            margin: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+        input {
+            width: 40px;
+            margin: 0 5px;
+            padding: 3px;
+        }
+        #solution {
+            margin: 20px;
+            padding: 15px;
+            background: #e8f4f8;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        button {
+            margin-left: 10px;
+            padding: 5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="equation">
+        <input type="text" id="a" placeholder="a">x² + 
+        <input type="text" id="b" placeholder="b">x + 
+        <input type="text" id="c" placeholder="c"> = 0
+        <button onclick="solve()">Solve</button>
+    </div>
+    <div id="solution">Solution will appear here</div>
+
+    <script>
+        function solve() {
+            // Get coefficients
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+            const solutionDiv = document.getElementById('solution');
+
+            // Input validation
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                solutionDiv.innerHTML = "Invalid coefficients! Please enter numbers.";
+                return;
+            }
+
+            // Case 1: Not a quadratic equation (a = 0)
+            if (a === 0) {
+                // Linear equation case
+                if (b === 0) {
+                    solutionDiv.innerHTML = c === 0 ? 
+                        "Infinite solutions" : 
+                        "No solution";
+                } else {
+                    const root = -c / b;
+                    solutionDiv.innerHTML = `x = ${root.toFixed(2)}`;
+                }
+                return;
+            }
+
+            // Calculate discriminant
+            const delta = b*b - 4*a*c;
+            const denominator = 2*a;
+
+            // Case 2: Real roots
+            if (delta >= 0) {
+                const sqrtDelta = Math.sqrt(delta);
+                const x1 = (-b + sqrtDelta) / denominator;
+                const x2 = (-b - sqrtDelta) / denominator;
+                
+                if (delta === 0) {
+                    solutionDiv.innerHTML = `x = ${x1.toFixed(2)}`;
+                } else {
+                    solutionDiv.innerHTML = `x₁ = ${x1.toFixed(2)}<br>x₂ = ${x2.toFixed(2)}`;
+                }
+            }
+            // Case 3: Complex roots
+            else {
+                const realPart = (-b / denominator).toFixed(2);
+                const imagPart = (Math.sqrt(-delta) / denominator).toFixed(2);
+                solutionDiv.innerHTML = `
+                    x₁ = ${realPart} + ${imagPart}i<br>
+                    x₂ = ${realPart} - ${imagPart}i
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
