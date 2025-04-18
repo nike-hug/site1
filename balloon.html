@@ -1,57 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balloon Animation</title>
     <style>
         body {
             margin: 0;
+            height: 100vh;
             overflow: hidden;
-            background-color: skyblue;
+            background: #87CEEB;
         }
+
         .balloon {
-            position: absolute;
-            bottom: 0;
-            width: 50px;
-            height: 50px;
-            background-color: red;
+            position: fixed;
+            width: 700px;
+            height: 700px;
             border-radius: 50%;
-            transition: background-color 0.5s ease-in-out;
+            bottom: -700px;
+            animation: float 20s linear infinite;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50vh) scale(0.9);
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.8);
+                opacity: 0.4;
+            }
         }
     </style>
 </head>
 <body>
     <script>
-        function createBalloons() {
-            for (let i = 0; i < 10; i++) {
-                let balloon = document.createElement("div");
-                balloon.classList.add("balloon");
-                balloon.style.left = `${Math.random() * window.innerWidth}px`;
-                document.body.appendChild(balloon);
-                animateBalloon(balloon);
-            }
-        }
+        let positions = [];
+        const MIN_DISTANCE = 800; // 最小间距800px
 
-        function animateBalloon(balloon) {
-            let position = 0;
-            let size = 50;
-            let interval = setInterval(() => {
-                if (position < window.innerHeight) {
-                    position += 2;
-                    size += 0.5;
-                    balloon.style.transform = `translateY(-${position}px)`;
-                    balloon.style.width = `${size}px`;
-                    balloon.style.height = `${size}px`;
-                    balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                } else {
-                    clearInterval(interval);
-                    balloon.remove(); // Remove balloon when it reaches the top
+        function getValidPosition() {
+            const maxAttempts = 100;
+            for(let attempt = 0; attempt < maxAttempts; attempt++) {
+                const newPos = Math.random() * (window.innerWidth - 700);
+               
+                const isValid = positions.every(pos => {
+                    return Math.abs(pos - newPos) > MIN_DISTANCE;
+                });
+
+                if(isValid || positions.length === 0) {
+                    positions.push(newPos);
+                    return newPos;
                 }
-            }, 50);
+            }
+            return Math.random() * (window.innerWidth - 700); 
         }
 
-        window.onload = createBalloons;
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            
+            const hue = Math.random() * 360;
+            balloon.style.backgroundColor = `hsl(${hue}, 85%, 65%)`;
+            
+            balloon.style.left = getValidPosition() + 'px';
+            
+            balloon.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+            
+            document.body.appendChild(balloon);
+                        balloon.addEventListener('animationend', () => {
+                const index = positions.indexOf(parseFloat(balloon.style.left));
+                if(index > -1) {
+                    positions.splice(index, 1);
+                }
+                balloon.remove();
+            });
+        }
+
+
+        setInterval(() => {
+            if(positions.length < 3) { // 最多同时存在3个气球
+                createBalloon();
+            }
+        }, 5000);
+
+        window.addEventListener('resize', () => {
+            positions = [];
+        });
     </script>
 </body>
 </html>
