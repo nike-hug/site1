@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: #87CEEB;
+        }
+        
+        .balloon {
+            position: absolute;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .explode {
+            animation: explode 0.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const colors = ['red', 'orange', 'yellow', 'green', 'black', 'blue', 'purple'];
+
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            
+            // 每个气球独立的属性
+            const startSize = 30 + Math.random() * 30;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const burstThreshold = 30 + Math.random() * 70; // 随机爆裂阈值（30-100px）
+            
+            Object.assign(balloon.style, {
+                width: `${startSize}px`,
+                height: `${startSize}px`,
+                background: color,
+                left: `${Math.random() * 100}%`,
+                bottom: '-50px'
+            });
+
+            document.body.appendChild(balloon);
+            animateBalloon(balloon, startSize, burstThreshold);
+        }
+
+        function animateBalloon(balloon, startSize, burstThreshold) {
+            let y = 0;
+            let size = startSize;
+            let alive = true;
+
+            function update() {
+                if (!alive) return;
+                
+                // 更新位置和尺寸
+                y += 1 + Math.random() * 2;
+                size = startSize * (1 + y / 400);
+                
+                balloon.style.transform = `translateY(-${y}px) scale(${1 + y/400})`;
+                balloon.style.width = `${size}px`;
+                balloon.style.height = `${size}px`;
+
+                // 获取实际位置
+                const rect = balloon.getBoundingClientRect();
+                
+                // 当气球顶部接近视口顶部时爆裂
+                if (rect.top < burstThreshold) {
+                    alive = false;
+                    balloon.classList.add('explode');
+                    setTimeout(() => balloon.remove(), 500);
+                } else {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // 自动生成气球（初始5个，后续每秒1个）
+        setInterval(createBalloon, 1000);
+        Array.from({length: 5}).forEach(createBalloon);
+    </script>
+</body>
+</html>
