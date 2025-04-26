@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Names List</title>
+</head>
+
+<body>
+    <!-- 这里假设这是名字列表表格 -->
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        <tr>
+            <td>Alice</td>
+            <td>Smith</td>
+        </tr>
+        <tr>
+            <td>Bob</td>
+            <td>Johnson</td>
+        </tr>
+        <tr>
+            <td>Charlie</td>
+            <td>Williams</td>
+        </tr>
+    </table>
+
+    <script>
+        window.onload = function () {
+            const table = document.getElementsByTagName('table')[0];
+            const rows = Array.from(table.rows).slice(1); 
+
+
+            rows.sort((rowA, rowB) => {
+                const nameA = rowA.cells[0].textContent.trim().toLowerCase();
+                const nameB = rowB.cells[0].textContent.trim().toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+      
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+ 
+            rows.forEach(row => {
+                table.appendChild(row);
+            });
+        };
+    </script>
+</body>
+
+</html>    
